@@ -1,0 +1,9 @@
+{
+  "private": true,
+  "scripts": {
+    "browser:install": "playwright install chromium"
+  },
+  "devDependencies": {
+    "playwright": "1.63.0"
+  }
+}

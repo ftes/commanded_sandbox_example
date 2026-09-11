@@ -5,7 +5,7 @@ defmodule SandboxDemo.MixProject do
     [
       app: :sandbox_demo,
       version: "0.1.0",
-      elixir: "~> 1.17",
+      elixir: "~> 1.20",
       elixirc_paths: elixirc_paths(Mix.env()),
       start_permanent: Mix.env() == :prod,
       aliases: aliases(),
@@ -41,6 +41,10 @@ defmodule SandboxDemo.MixProject do
   defp deps do
     [
       {:phoenix, "~> 1.8.13"},
+      {:commanded, "~> 1.4.11"},
+      {:commanded_ecto_projections, "~> 1.4.0"},
+      {:mimic, "~> 2.4", only: :test},
+      {:phoenix_test_playwright, "~> 0.17.0", only: :test, runtime: false},
       {:phoenix_ecto, "~> 4.5"},
       {:ecto_sql, "~> 3.13"},
       {:postgrex, ">= 0.0.0"},

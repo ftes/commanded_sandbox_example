@@ -18,6 +18,7 @@ defmodule SandboxDemoWeb.Router do
     pipe_through :browser
 
     get "/", PageController, :home
+    live "/articles", ArticlesLive
   end
 
   # Other scopes may use custom stacks.

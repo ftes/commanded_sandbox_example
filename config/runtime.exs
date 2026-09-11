@@ -20,8 +20,10 @@ if System.get_env("PHX_SERVER") do
   config :sandbox_demo, SandboxDemoWeb.Endpoint, server: true
 end
 
-config :sandbox_demo, SandboxDemoWeb.Endpoint,
-  http: [port: String.to_integer(System.get_env("PORT", "4000"))]
+if config_env() != :test do
+  config :sandbox_demo, SandboxDemoWeb.Endpoint,
+    http: [port: String.to_integer(System.get_env("PORT", "4000"))]
+end
 
 if config_env() == :dev do
   # Reload browser tabs when matching files change.

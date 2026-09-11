@@ -16,8 +16,9 @@ defmodule SandboxDemo.DataCase do
 
   use ExUnit.CaseTemplate
 
-  using do
+  using opts do
     quote do
+      use SandboxDemo.CommandedSandbox, unquote(opts)
       alias SandboxDemo.Repo
 
       import Ecto
@@ -28,8 +29,7 @@ defmodule SandboxDemo.DataCase do
   end
 
   setup tags do
-    SandboxDemo.DataCase.setup_sandbox(tags)
-    :ok
+    [commanded_supervisor: SandboxDemo.DataCase.setup_sandbox(tags)]
   end
 
   @doc """
@@ -38,6 +38,7 @@ defmodule SandboxDemo.DataCase do
   def setup_sandbox(tags) do
     pid = Ecto.Adapters.SQL.Sandbox.start_owner!(SandboxDemo.Repo, shared: not tags[:async])
     on_exit(fn -> Ecto.Adapters.SQL.Sandbox.stop_owner(pid) end)
+    SandboxDemo.CommandedSandbox.start!(tags.commanded_application)
   end
 
   @doc """

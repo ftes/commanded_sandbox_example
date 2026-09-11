@@ -17,8 +17,9 @@ defmodule SandboxDemoWeb.ConnCase do
 
   use ExUnit.CaseTemplate
 
-  using do
+  using opts do
     quote do
+      use SandboxDemo.CommandedSandbox, unquote(opts)
       # The default endpoint for testing
       @endpoint SandboxDemoWeb.Endpoint
 

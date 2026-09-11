@@ -7,21 +7,30 @@ defmodule SandboxDemo.Application do
 
   @impl true
   def start(_type, _args) do
-    children = [
-      SandboxDemoWeb.Telemetry,
-      SandboxDemo.Repo,
-      {DNSCluster, query: Application.get_env(:sandbox_demo, :dns_cluster_query) || :ignore},
-      {Phoenix.PubSub, name: SandboxDemo.PubSub},
-      # Start a worker by calling: SandboxDemo.Worker.start_link(arg)
-      # {SandboxDemo.Worker, arg},
-      # Start to serve requests, typically the last entry
-      SandboxDemoWeb.Endpoint
-    ]
+    children =
+      [
+        SandboxDemoWeb.Telemetry,
+        SandboxDemo.Repo,
+        {DNSCluster, query: Application.get_env(:sandbox_demo, :dns_cluster_query) || :ignore},
+        {Phoenix.PubSub, name: SandboxDemo.PubSub}
+      ] ++
+        commanded_children() ++
+        [
+          SandboxDemoWeb.Endpoint
+        ]
 
     # See https://elixir.hexdocs.pm/Supervisor.html
     # for other strategies and supported options
     opts = [strategy: :one_for_one, name: SandboxDemo.Supervisor]
     Supervisor.start_link(children, opts)
+  end
+
+  defp commanded_children do
+    if Application.get_env(:sandbox_demo, :start_commanded, true) do
+      [SandboxDemo, SandboxDemo.Articles.Projector]
+    else
+      []
+    end
   end
 
   # Tell Phoenix to update the endpoint configuration

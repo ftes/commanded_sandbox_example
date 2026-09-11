@@ -52,6 +52,10 @@ defmodule SandboxDemoWeb do
     quote do
       use Phoenix.LiveView
 
+      if Application.compile_env(:sandbox_demo, :sql_sandbox) do
+        on_mount SandboxDemoWeb.SandboxHook
+      end
+
       unquote(html_helpers())
     end
   end

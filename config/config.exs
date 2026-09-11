@@ -11,6 +11,12 @@ config :sandbox_demo,
   ecto_repos: [SandboxDemo.Repo],
   generators: [timestamp_type: :utc_datetime]
 
+# The demo uses an in-memory event store in all environments. A production
+# application should configure a durable Commanded event store adapter.
+config :sandbox_demo, SandboxDemo, event_store: [adapter: Commanded.EventStore.Adapters.InMemory]
+
+config :sandbox_demo, start_commanded: true
+
 # Configure the endpoint
 config :sandbox_demo, SandboxDemoWeb.Endpoint,
   url: [host: "localhost"],
